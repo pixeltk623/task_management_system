@@ -123,7 +123,7 @@
   <!-- Main Footer -->
   <footer class="main-footer">
     <strong>Copyright &copy; 2020 <a href="https://task.pixeltk.com">pixeltk.com</a></strong>
-    All rights reserved.
+    All rights reserved.              
     <div class="float-right d-none d-sm-inline-block">
       <b><?php echo $_SESSION['system']['name'] ?></b>
     </div>
