@@ -1,5 +1,13 @@
 <?php
 session_start();
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+//Load Composer's autoloader
+require 'vendor/autoload.php';
+
 ini_set('display_errors', 1);
 Class Action {
 	private $db;
@@ -48,7 +56,54 @@ Class Action {
 			return 3;
 		}
 	}
+
+	function emailSend($data=null){
+ 	
+		$qry = $this->db->query("SELECT * FROM `email_template");
+		$dataA = $qry->fetch_array();
+
+
+		$arrayData = array(
+			"to" => $data['email'],
+			"name" => $data['firstname']." ".$data['lastname']
+ 		);
+
+		$emailTitle = str_replace("{{User}}",$arrayData['name'],$dataA['title']);
+ 		$bodyMessage = str_replace("{{name}}",$arrayData['name'],$dataA['body']);
+ 		 
+ 		
+		$mail = new PHPMailer(true);
+
+		
+
+    		//Server settings
+    		//$mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+			$mail->isSMTP();                      // Set mailer to use SMTP 
+			$mail->Host = 'smtp.gmail.com';       // Specify main and backup SMTP servers 
+			$mail->SMTPAuth = true;               // Enable SMTP authentication 
+			$mail->Username = 'hina.rangani27@gmail.com';   // SMTP username 
+			$mail->Password = 'hinapatel15';   // SMTP password 
+			$mail->SMTPSecure = 'tls';            // Enable TLS encryption, `ssl` also accepted 
+			$mail->Port = 587;                    // TCP port to connect to 
+
+    		//Recipients
+    		$mail->setFrom($dataA['from_email'], 'Heena Patel');
+    		$mail->addAddress($arrayData['to'], $arrayData['name']);    
+
+
+    		//Content
+    		$mail->isHTML(true);                                  //Set email format to HTML
+    		$mail->Subject = $emailTitle;
+    		$mail->Body    = $bodyMessage;
+    		
+
+    		$mail->send();
+    		return 1;
+		
+}
+
 	function save_user(){
+		
 		extract($_POST);
 		$data = "";
 		foreach($_POST as $k => $v){
@@ -77,6 +132,7 @@ Class Action {
 		}
 		if(empty($id)){
 			$save = $this->db->query("INSERT INTO users set $data");
+			$save = $this->emailSend($_POST);
 		}else{
 			$save = $this->db->query("UPDATE users set $data where id = $id");
 		}
