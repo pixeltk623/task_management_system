@@ -1,9 +1,8 @@
-<?php
-?>
+
 <div class="col-lg-12">
 	<div class="card">
 		<div class="card-body">
-			<form action="" id="manage_user">
+			<form method="post" action="" id="manage_user">
 				<input type="hidden" name="id" value="<?php echo isset($id) ? $id : '' ?>">
 				<div class="row">
 					<div class="col-md-6 border-right">
@@ -35,7 +34,8 @@
 		                    </div>
 						</div>
 						<div class="form-group d-flex justify-content-center align-items-center">
-							<img src="<?php echo isset($avatar) ? 'assets/uploads/'.$avatar :'' ?>" alt="Avatar" id="cimg" class="img-fluid img-thumbnail ">
+							<img src="<?php echo isset($avatar) ? 'assets/uploads/'.$avatar :'assets/uploads/profile.jpg' ?>" alt="Avatar" id="cimg" class="img-fluid img-thumbnail ">
+
 						</div>
 					</div>
 					<div class="col-md-6">
@@ -59,13 +59,18 @@
 				</div>
 				<hr>
 				<div class="col-lg-12 text-right justify-content-center d-flex">
-					<button class="btn btn-primary mr-2">Save</button>
+					<button class="btn btn-primary mr-2" onclick="myFunction()">Save</button>
+					<!--<input type="submit" name="submit" value="Save"  class="btn btn-primary mr-2">-->
+					<p id="demo"></p>
+
 					<button class="btn btn-secondary" type="button" onclick="location.href = 'index.php?page=user_list'">Cancel</button>
+					
 				</div>
 			</form>
 		</div>
 	</div>
 </div>
+
 <style>
 	img#cimg{
 		height: 15vh;
@@ -75,6 +80,11 @@
 	}
 </style>
 <script>
+	
+
+	function myFunction() {
+  	document.getElementById("demo").innerHTML = "Hello World";
+}
 	$('[name="password"],[name="cpass"]').keyup(function(){
 		var pass = $('[name="password"]').val()
 		var cpass = $('[name="cpass"]').val()
@@ -100,6 +110,7 @@
 	}
 	$('#manage_user').submit(function(e){
 		e.preventDefault()
+		
 		$('input').removeClass("border-danger")
 		start_load()
 		$('#msg').html('')
@@ -134,4 +145,8 @@
 			}
 		})
 	})
+
 </script>
+
+
+
